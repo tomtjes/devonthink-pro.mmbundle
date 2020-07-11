@@ -1,6 +1,6 @@
 #!/bin/bash
 
-tmpfile="$TMPDIR/8D444CFE-C1F9-4F82-AD8B-4EA7EC7A77C2.eml"
+tmpfile="$TMPDIR/D6D5F966-41E9-488F-A4EA-76E37744A558.eml"
 cat > "${tmpfile}"
 
 # Tricky substitution to make it work for " and \ in the AppleScript below.
