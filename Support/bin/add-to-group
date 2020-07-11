@@ -1,0 +1,41 @@
+#!/bin/bash
+
+tmpfile="$TMPDIR/6869BEBF-BCC4-4F69-AFDD-9B963C9A734D.eml"
+cat > "${tmpfile}"
+
+# Tricky substitution to make it work for " and \ in the AppleScript below.
+name=${MM_SUBJECT//\\/\\\\}
+name=${name//\"/\\\"}
+url="message://%3c${MM_MESSAGE_ID}%3e"
+group=${MM_BUNDLE_ITEM_NAME//\\/\\\\}
+group=${group//\"/\\\"}
+databasepath=${MM_DT_DATABASE_PATH}
+
+osascript <<END
+
+set pDatabasePath to "${databasepath}"
+set pMessageLocation to "/" & "${group}"
+
+try
+	tell application id "DNtp"
+		if pDatabasePath is "" then
+				set destination_database to inbox
+			else
+				set destination_database to open database pDatabasePath -- Ensure that the database is open
+			end if
+		set message_group to create location pMessageLocation in destination_database
+		set theRecord to import "${tmpfile}" from "MailMate" name "${name}" to message_group
+		set modification date of theRecord to creation date of theRecord
+		set the URL of theRecord to "${url}" # Allows it to be opened in MailMate using ⌃⌘O
+	    display notification "Added message \"${name}\" to DEVONthink" with title "MailMate"
+	end tell
+on error errMsg number eNum
+	tell application "System Events"
+		activate
+		display alert "DEVONThink: " & eNum message errMsg
+	end tell
+end try
+
+END
+
+unlink "${tmpfile}"

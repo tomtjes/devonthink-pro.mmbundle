@@ -1,0 +1,8 @@
+{
+	name          = 'SampleGroup';
+	input         = 'raw';
+	environment   = 'MM_DT_DATABASE_PATH=/Users/MyName/Databases/MyDatabase.dtBase2\nMM_SUBJECT=${subject.prefix:+${subject.prefix} }${subject.blob:+[${subject.blob}] }${subject.body:no subject}\nMM_MESSAGE_ID=${message-id.split}\n';
+	command       = '#!/bin/bash\n"${MM_BUNDLE_SUPPORT}/bin/add-to-group"';
+	keyEquivalent = "";
+	uuid          = '32FB82FD-E643-4509-BD24-C1E9EDE2CFC0';
+}
